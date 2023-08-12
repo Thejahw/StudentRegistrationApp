@@ -1,11 +1,17 @@
+using Microsoft.EntityFrameworkCore;
+using SoftOne;
+using SoftOne.Interfaces;
+using SoftOne.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddDbContext<SoftOneContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("WebApiDatabase")));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddTransient<Istudent, StudentService>();
 
 var app = builder.Build();
 
