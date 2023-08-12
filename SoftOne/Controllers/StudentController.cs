@@ -28,9 +28,11 @@ namespace SoftOne.Controllers
 
         // GET api/<StudentController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult GetStudentById(int id)
         {
-            return "value";
+            var response = _student.GetStudentsById(id);
+            return Ok(response);
         }
 
         // POST api/<StudentController>

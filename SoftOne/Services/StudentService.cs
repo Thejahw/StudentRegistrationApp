@@ -49,6 +49,28 @@ namespace SoftOne.Services
             return students;
         }
 
+        public StudentRequestResponse GetStudentsById(int id)
+        {
+            var DBStudent = _context.Students.Where(x => x.StudentId == id).FirstOrDefault();
+            if (DBStudent == null)
+            {
+                throw new ArgumentNullException("Invalid student id requested");
+            }
+            return new StudentRequestResponse
+            {
+                FirstName = DBStudent.FirstName,
+                LastName = DBStudent.LastName,
+                ContactNo = DBStudent.ContactNo,
+                Email = DBStudent.Email,
+                Ssn = DBStudent.Ssn,
+                Dob = DBStudent.Dob,
+                PrimaryAdressLine = DBStudent.PrimaryAdressLine,
+                Street = DBStudent.Street,
+                City = DBStudent.City,
+                Country = DBStudent.Country,
+            };
+        }
+
         public bool SaveStudent(StudentRequestResponse student)
         {
             try
@@ -90,10 +112,8 @@ namespace SoftOne.Services
             }
             catch(Exception ex)
             {
-                 
-                return false;
-            }
-            
+                throw new Exception("Soething went wrong while saving request");
+            }            
         }
     }
 }
