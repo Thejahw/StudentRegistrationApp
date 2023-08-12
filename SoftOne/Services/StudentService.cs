@@ -115,5 +115,42 @@ namespace SoftOne.Services
                 throw new Exception("Soething went wrong while saving request");
             }            
         }
+
+        public StudentRequestResponse Updatetudent(int id, StudentRequestResponse student)
+        {
+            var DBStudent = _context.Students.Where(x=>x.StudentId==id).FirstOrDefault();
+            if (DBStudent == null)
+            {
+                throw new ArgumentNullException("Invalid student id requested");
+            }
+            DBStudent.FirstName = student.FirstName;
+            DBStudent.LastName = student.LastName;
+            DBStudent.ContactNo = student.ContactNo;
+            DBStudent.Email = student.Email;
+            DBStudent.Ssn = student.Ssn;
+            DBStudent.Dob = student.Dob;
+            DBStudent.Title = student.Title;
+            DBStudent.StartDate = student.StartDate;
+            DBStudent.PrimaryAdressLine = student.PrimaryAdressLine;
+            DBStudent.Street = student.Street;
+            DBStudent.City = student.City;
+            DBStudent.Country = student.Country;
+
+            _context.Students.Update(DBStudent);
+            _context.SaveChanges();
+            return new StudentRequestResponse
+            {
+                FirstName = student.FirstName,
+                LastName = student.LastName,
+                ContactNo = student.ContactNo,
+                Email = student.Email,
+                Ssn = student.Ssn,
+                Dob = student.Dob,
+                PrimaryAdressLine = student.PrimaryAdressLine,
+                Street = student.Street,
+                City = student.City,
+                Country = student.Country,
+            };
+        }
     }
 }

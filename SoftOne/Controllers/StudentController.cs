@@ -46,8 +46,11 @@ namespace SoftOne.Controllers
 
         // PUT api/<StudentController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult PutStuddent(int id, [FromBody] StudentRequestResponse student)
         {
+            var response = _student.Updatetudent(id, student);
+            return Ok(response);
         }
 
         // DELETE api/<StudentController>/5
