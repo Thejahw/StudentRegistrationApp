@@ -9,5 +9,6 @@ namespace SoftOne.Interfaces
         List<StudentRequestResponse> GetStudents(string orderby);
         StudentRequestResponse GetStudentsById(int id);
         StudentRequestResponse Updatetudent(int id, StudentRequestResponse student);
+        bool DeleteStudent(int id);
     }
 }

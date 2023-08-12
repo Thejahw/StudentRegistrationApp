@@ -55,8 +55,11 @@ namespace SoftOne.Controllers
 
         // DELETE api/<StudentController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult DeleteStudent(int id)
         {
+            var response = _student.DeleteStudent(id);
+            return Ok(response);
         }
     }
 }

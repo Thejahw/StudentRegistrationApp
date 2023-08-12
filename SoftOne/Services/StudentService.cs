@@ -12,6 +12,25 @@ namespace SoftOne.Services
             _context = context;
         }
 
+        public bool DeleteStudent(int id)
+        {
+            try
+            {
+                var DBStudent = _context.Students.Where(x => x.StudentId == id).FirstOrDefault();
+                if (DBStudent == null)
+                {
+                    throw new ArgumentNullException("Invalid student id requested");
+                }
+                _context.Students.Remove(DBStudent);
+                _context.SaveChanges();
+                return true;
+            }catch(Exception ex)
+            {
+                throw new Exception("Soething went wrong while deleting student. Exception: " + ex.Message);
+            }
+            
+        }
+
         public List<StudentRequestResponse> GetStudents(string orderby)
         {
             IQueryable<Student> DBStudents;
@@ -112,7 +131,7 @@ namespace SoftOne.Services
             }
             catch(Exception ex)
             {
-                throw new Exception("Soething went wrong while saving request");
+                throw new Exception("Soething went wrong while saving request. Exception: "+ex.Message);
             }            
         }
 
