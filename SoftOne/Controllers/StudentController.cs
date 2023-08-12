@@ -19,9 +19,11 @@ namespace SoftOne.Controllers
         }
         // GET: api/<StudentController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult GetStudents(string? orderby)
         {
-            return new string[] { "value1", "value2" };
+            var response =  _student.GetStudents(orderby);
+            return Ok(response);
         }
 
         // GET api/<StudentController>/5
