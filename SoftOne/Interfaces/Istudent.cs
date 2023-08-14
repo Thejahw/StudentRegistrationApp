@@ -6,8 +6,9 @@ namespace SoftOne.Interfaces
     public interface Istudent
     {
         bool SaveStudent(StudentRequestResponse student);
-        List<StudentRequestResponse> GetStudents(string orderby);
-        StudentRequestResponse GetStudentsById(int id);
+        List<StudentDetails> GetStudents(string orderby);
+        StudentDetails GetStudentsById(int id);
+        List<StudentDetails> SearchStudent( string key);
         StudentRequestResponse Updatetudent(int id, StudentRequestResponse student);
         bool DeleteStudent(int id);
     }

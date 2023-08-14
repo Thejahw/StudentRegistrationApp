@@ -31,7 +31,7 @@ namespace SoftOne.Services
             
         }
 
-        public List<StudentRequestResponse> GetStudents(string orderby)
+        public List<StudentDetails> GetStudents(string orderby)
         {
             IQueryable<Student> DBStudents;
             switch (orderby)
@@ -51,16 +51,20 @@ namespace SoftOne.Services
             }
              
 
-            var students = new List<StudentRequestResponse>();
+            var students = new List<StudentDetails>();
             foreach(var student in DBStudents)
             {
-                var studentDetails = new StudentRequestResponse
+                var studentDetails = new StudentDetails
                 {
+                    StudentId = student.StudentId,
                     FirstName = student.FirstName,
                     LastName = student.LastName,
                     ContactNo = student.ContactNo,
                     Email = student.Email,
-                    Ssn = student.Ssn
+                    Ssn = student.Ssn,
+                    PrimaryAdressLine = student.PrimaryAdressLine,
+                    Street = student.Street,
+                    City = student.City,
                 };
                 students.Add(studentDetails);
             }
@@ -68,15 +72,16 @@ namespace SoftOne.Services
             return students;
         }
 
-        public StudentRequestResponse GetStudentsById(int id)
+        public StudentDetails GetStudentsById(int id)
         {
             var DBStudent = _context.Students.Where(x => x.StudentId == id).FirstOrDefault();
             if (DBStudent == null)
             {
                 throw new ArgumentNullException("Invalid student id requested");
             }
-            return new StudentRequestResponse
+            return new StudentDetails
             {
+                StudentId = DBStudent.StudentId,
                 FirstName = DBStudent.FirstName,
                 LastName = DBStudent.LastName,
                 ContactNo = DBStudent.ContactNo,
@@ -94,6 +99,12 @@ namespace SoftOne.Services
         {
             try
             {
+                //var imagePath = "";
+                //if (student.Profileimage != null)
+                //{
+                //    imagePath = SaveProfileImage(student.Profileimage, student.Ssn.ToString()+".jpg");
+                //}
+
                 var studentRecord = new Student
                 {
                     FirstName = student.FirstName,
@@ -123,9 +134,10 @@ namespace SoftOne.Services
                     City = student.City,
 
                     Country = student.Country,
+                    //ImageUrl = imagePath,
 
                 };
-                _context.Students.Add(studentRecord);
+                _context.Students.Add(studentRecord);               
                 _context.SaveChanges();
                 return true;
             }
@@ -133,6 +145,33 @@ namespace SoftOne.Services
             {
                 throw new Exception("Soething went wrong while saving request. Exception: "+ex.Message);
             }            
+        }
+
+        public List<StudentDetails> SearchStudent(string key)
+        {
+            IQueryable<Student> DBStudents = _context.Students.Where(x => x.FirstName.Contains(key) || x.LastName.Contains(key) || x.ContactNo.Contains(key)
+            || x.Email.Contains(key) || x.Ssn.ToString().Contains(key)
+            || x.PrimaryAdressLine.Contains(key) || x.Street.Contains(key) || x.City.Contains(key));
+            
+            var students = new List<StudentDetails>();
+            foreach (var student in DBStudents)
+            {
+                var studentDetails = new StudentDetails
+                {
+                    StudentId = student.StudentId,
+                    FirstName = student.FirstName,
+                    LastName = student.LastName,
+                    ContactNo = student.ContactNo,
+                    Email = student.Email,
+                    Ssn = student.Ssn,
+                    PrimaryAdressLine = student.PrimaryAdressLine,
+                    Street = student.Street,
+                    City = student.City,
+                };
+                students.Add(studentDetails);
+            }
+
+            return students;
         }
 
         public StudentRequestResponse Updatetudent(int id, StudentRequestResponse student)
@@ -170,6 +209,24 @@ namespace SoftOne.Services
                 City = student.City,
                 Country = student.Country,
             };
+        }
+
+        private string SaveProfileImage( IFormFile image, string filename)
+        {
+            try
+            {
+                string path = Path.Combine(@".\ProfileImages\", filename);
+                using (Stream stream = new FileStream(path, FileMode.Create))
+                {
+                    image.CopyTo(stream);
+                }
+                //save image location in db
+                return ".\\ProfileImages\\" + filename;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Soething went wrong while saving image. Exception: " + ex.Message);
+            }
         }
     }
 }

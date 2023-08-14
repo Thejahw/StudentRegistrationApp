@@ -61,5 +61,13 @@ namespace SoftOne.Controllers
             var response = _student.DeleteStudent(id);
             return Ok(response);
         }
+
+        [HttpGet("search/{key}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult SearchStudent(string key)
+        {
+            var response = _student.SearchStudent( key);
+            return Ok(response);
+        }
     }
 }
