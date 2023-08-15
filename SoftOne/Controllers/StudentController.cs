@@ -69,5 +69,13 @@ namespace SoftOne.Controllers
             var response = _student.SearchStudent( key);
             return Ok(response);
         }
+
+        [HttpPut("profile/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult PutProfileImage(int id, [FromForm]ImageData image)
+        {
+            var response = _student.PutProfileImage(id, image);
+            return Ok(response);
+        }
     }
 }

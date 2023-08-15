@@ -11,5 +11,6 @@ namespace SoftOne.Interfaces
         List<StudentDetails> SearchStudent( string key);
         StudentRequestResponse Updatetudent(int id, StudentRequestResponse student);
         bool DeleteStudent(int id);
+        StudentDetails PutProfileImage(int id, ImageData image);
     }
 }

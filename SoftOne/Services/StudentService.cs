@@ -1,4 +1,5 @@
-﻿using SoftOne.Interfaces;
+﻿using Microsoft.AspNetCore.Mvc;
+using SoftOne.Interfaces;
 using SoftOne.Models;
 using SoftOne.ViewModels;
 
@@ -7,9 +8,11 @@ namespace SoftOne.Services
     public class StudentService : Istudent
     {
         private readonly SoftOneContext _context;
-        public StudentService(SoftOneContext context)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public StudentService(SoftOneContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public bool DeleteStudent(int id)
@@ -65,6 +68,7 @@ namespace SoftOne.Services
                     PrimaryAdressLine = student.PrimaryAdressLine,
                     Street = student.Street,
                     City = student.City,
+                    ImageUrl = student.ImageUrl==null? null: "https://localhost:7082/Profile/" + student.ImageUrl,
                 };
                 students.Add(studentDetails);
             }
@@ -92,6 +96,29 @@ namespace SoftOne.Services
                 Street = DBStudent.Street,
                 City = DBStudent.City,
                 Country = DBStudent.Country,
+                ImageUrl = DBStudent.ImageUrl == null ? null : "https://localhost:7082/Profile/" + DBStudent.ImageUrl,
+            };
+        }
+
+        public StudentDetails PutProfileImage(int id, ImageData image)
+        {
+            var DBStudent = _context.Students.Where(x => x.StudentId == id).FirstOrDefault();
+            if (DBStudent == null)
+            {
+                throw new ArgumentNullException("Invalid student id requested");
+            }
+            var imagePath = "";
+            if (image != null)
+            {
+                imagePath = SaveProfileImage(image.imageFile, DBStudent.Ssn.ToString() + ".jpg");
+            }
+            DBStudent.ImageUrl = imagePath;
+
+            _context.Students.Update(DBStudent);
+            _context.SaveChanges();
+            return new StudentDetails
+            {
+                StudentId = DBStudent.StudentId,
             };
         }
 
@@ -99,12 +126,6 @@ namespace SoftOne.Services
         {
             try
             {
-                //var imagePath = "";
-                //if (student.Profileimage != null)
-                //{
-                //    imagePath = SaveProfileImage(student.Profileimage, student.Ssn.ToString()+".jpg");
-                //}
-
                 var studentRecord = new Student
                 {
                     FirstName = student.FirstName,
@@ -134,7 +155,6 @@ namespace SoftOne.Services
                     City = student.City,
 
                     Country = student.Country,
-                    //ImageUrl = imagePath,
 
                 };
                 _context.Students.Add(studentRecord);               
@@ -181,6 +201,11 @@ namespace SoftOne.Services
             {
                 throw new ArgumentNullException("Invalid student id requested");
             }
+            var imagePath = "";
+            //if (student.Profileimage != null)
+            //{
+            //    imagePath = SaveProfileImage(student.Profileimage, student.Ssn.ToString() + ".jpg");
+            //}
             DBStudent.FirstName = student.FirstName;
             DBStudent.LastName = student.LastName;
             DBStudent.ContactNo = student.ContactNo;
@@ -193,6 +218,7 @@ namespace SoftOne.Services
             DBStudent.Street = student.Street;
             DBStudent.City = student.City;
             DBStudent.Country = student.Country;
+            //DBStudent.ImageUrl = imagePath;
 
             _context.Students.Update(DBStudent);
             _context.SaveChanges();
@@ -215,13 +241,14 @@ namespace SoftOne.Services
         {
             try
             {
-                string path = Path.Combine(@".\ProfileImages\", filename);
+                string path = _webHostEnvironment.WebRootPath+"\\Profile\\" + filename;
+                //string path = Path.Combine(@".\ProfileImages\", filename);
                 using (Stream stream = new FileStream(path, FileMode.Create))
                 {
                     image.CopyTo(stream);
                 }
                 //save image location in db
-                return ".\\ProfileImages\\" + filename;
+                return filename;
             }
             catch (Exception ex)
             {

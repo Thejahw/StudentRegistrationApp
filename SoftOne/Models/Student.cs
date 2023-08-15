@@ -34,7 +34,7 @@ public partial class Student
     public string City { get; set; } = null!;
 
     public string Country { get; set; } = null!;
-    public string ImageUrl { get; set; } = null!;
+    public string? ImageUrl { get; set; } = null!;
 
     public virtual ICollection<RoleXStudent> RoleXStudents { get; set; } = new List<RoleXStudent>();
 }

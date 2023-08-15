@@ -30,5 +30,6 @@
         public string City { get; set; } = null!;
 
         public string Country { get; set; } = null!;
+        public string? ImageUrl { get; set; } = null!;
     }
 }

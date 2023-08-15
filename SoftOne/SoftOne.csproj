@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="ProfileImages\" />
+    <Folder Include="wwwroot\Profile\" />
   </ItemGroup>
 
 </Project>
