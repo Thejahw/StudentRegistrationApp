@@ -203,10 +203,7 @@ namespace SoftOne.Services
                 throw new ArgumentNullException("Invalid student id requested");
             }
             var imagePath = "";
-            //if (student.Profileimage != null)
-            //{
-            //    imagePath = SaveProfileImage(student.Profileimage, student.Ssn.ToString() + ".jpg");
-            //}
+            
             DBStudent.FirstName = student.FirstName;
             DBStudent.LastName = student.LastName;
             DBStudent.ContactNo = student.ContactNo;
@@ -219,7 +216,6 @@ namespace SoftOne.Services
             DBStudent.Street = student.Street;
             DBStudent.City = student.City;
             DBStudent.Country = student.Country;
-            //DBStudent.ImageUrl = imagePath;
 
             _context.Students.Update(DBStudent);
             _context.SaveChanges();
