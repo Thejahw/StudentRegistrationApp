@@ -21,9 +21,17 @@ namespace SoftOne.Controllers
         [HttpGet("{pageNo}/{pageSize}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetStudents(int pageNo, int pageSize,string? orderby )
-        {
-            var response =  _student.GetStudents(pageNo, pageSize,orderby);
-            return Ok(response);
+        { 
+            try
+            {
+                var response = _student.GetStudents(pageNo, pageSize, orderby);
+                return Ok(response);
+            }
+            catch(Exception e)
+            {
+                return Problem($"Soething went wrong: {e.Message}");
+            }
+            
         }
 
         // GET api/<StudentController>/5
@@ -31,8 +39,16 @@ namespace SoftOne.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetStudentById(int id)
         {
-            var response = _student.GetStudentsById(id);
-            return Ok(response);
+            try
+            {
+                var response = _student.GetStudentsById(id);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return Problem($"Soething went wrong: {e.Message}");
+            }
+            
         }
 
         // POST api/<StudentController>
@@ -40,8 +56,16 @@ namespace SoftOne.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult PostStudent([FromBody] StudentRequestResponse student)
         {
-            _student.SaveStudent(student);
-            return Ok();
+            try
+            {
+                _student.SaveStudent(student);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return Problem($"Soething went wrong: {e.Message}");
+            }
+            
         }
 
         // PUT api/<StudentController>/5
@@ -49,8 +73,16 @@ namespace SoftOne.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult PutStuddent(int id, [FromBody] StudentRequestResponse student)
         {
-            var response = _student.Updatetudent(id, student);
-            return Ok(response);
+            try
+            {
+                var response = _student.Updatetudent(id, student);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return Problem($"Soething went wrong: {e.Message}");
+            }
+            
         }
 
         // DELETE api/<StudentController>/5
@@ -58,24 +90,49 @@ namespace SoftOne.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult DeleteStudent(int id)
         {
-            var response = _student.DeleteStudent(id);
-            return Ok(response);
+            try
+            {
+                var response = _student.DeleteStudent(id);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return Problem($"Soething went wrong: {e.Message}");
+            }
+            
         }
 
         [HttpGet("search/{key}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult SearchStudent(string key)
         {
-            var response = _student.SearchStudent( key);
-            return Ok(response);
+            try
+            {
+                var response = _student.SearchStudent(key);
+                return Ok(response);
+
+            }
+            catch (Exception e)
+            {
+                return Problem($"Soething went wrong: {e.Message}");
+            }
+            
         }
 
         [HttpPut("profile/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult PutProfileImage(int id, [FromForm]ImageData image)
         {
-            var response = _student.PutProfileImage(id, image);
-            return Ok(response);
+            try
+            {
+                var response = _student.PutProfileImage(id, image);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return Problem($"Soething went wrong: {e.Message}");
+            }
+            
         }
     }
 }
