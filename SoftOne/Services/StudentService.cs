@@ -34,22 +34,22 @@ namespace SoftOne.Services
             
         }
 
-        public List<StudentDetails> GetStudents(string orderby)
+        public List<StudentDetails> GetStudents(int pageNo, int pageSize, string orderby)
         {
             IQueryable<Student> DBStudents;
             switch (orderby)
             {
                 case "FirstName":
-                    DBStudents = _context.Students.OrderBy(x => x.FirstName).Take(10);
+                    DBStudents = _context.Students.OrderBy(x => x.FirstName).Skip(pageNo*pageSize).Take(pageSize);
                     break;
                 case "LastName":
-                    DBStudents = _context.Students.OrderBy(x => x.LastName).Take(10);
+                    DBStudents = _context.Students.OrderBy(x => x.LastName).Skip(pageNo * pageSize).Take(pageSize);
                     break;
                 case "SSN":
-                    DBStudents = _context.Students.OrderBy(x => x.Ssn).Take(10);
+                    DBStudents = _context.Students.OrderBy(x => x.Ssn).Skip(pageNo * pageSize).Take(pageSize);
                     break;
                 default:
-                    DBStudents = _context.Students.OrderBy(x => x.StudentId).Take(10);
+                    DBStudents = _context.Students.OrderBy(x => x.StudentId).Skip(pageNo * pageSize).Take(pageSize);
                     break;
             }
              
@@ -96,6 +96,7 @@ namespace SoftOne.Services
                 Street = DBStudent.Street,
                 City = DBStudent.City,
                 Country = DBStudent.Country,
+                Title = DBStudent.Title, 
                 ImageUrl = DBStudent.ImageUrl == null ? null : "https://localhost:7082/Profile/" + DBStudent.ImageUrl,
             };
         }

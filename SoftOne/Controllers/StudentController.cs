@@ -18,11 +18,11 @@ namespace SoftOne.Controllers
 
         }
         // GET: api/<StudentController>
-        [HttpGet]
+        [HttpGet("{pageNo}/{pageSize}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetStudents(string? orderby)
+        public IActionResult GetStudents(int pageNo, int pageSize,string? orderby )
         {
-            var response =  _student.GetStudents(orderby);
+            var response =  _student.GetStudents(pageNo, pageSize,orderby);
             return Ok(response);
         }
 
